@@ -50,6 +50,9 @@ def obtener_orden_por_id(pedido_id):
 def main():
     """Aplicación separada solo para confirmaciones de clientes"""
     
+    # Configuración de página
+    st.set_page_config(page_title="Confirmación de Pedido", layout="centered")
+    
     # Obtener parámetros de la URL
     query_params = st.query_params
     pedido_id = query_params.get("pedido", [None])[0] if "pedido" in query_params else None
@@ -60,18 +63,19 @@ def main():
         return
     
     # Mostrar interfaz de confirmación
-    st.set_page_config(page_title="Confirmación de Pedido", layout="centered")
     st.title("✅ Confirmación de Pedido")
     st.info("Por favor revise los detalles de su pedido y confirme que todo esté correcto.")
     
     # Obtener datos del pedido
-    orden = obtener_orden_por_id(pedido_id)
+    with st.spinner("Buscando información del pedido..."):
+        orden = obtener_orden_por_id(pedido_id)
     
     if orden is None:
         st.error("❌ No se encontró el pedido solicitado")
+        st.info("💡 Verifica que el número de pedido sea correcto")
         return
     
-    # Mostrar información (SOLO LECTURA - igual que antes)
+    # Mostrar información (SOLO LECTURA)
     col1, col2 = st.columns(2)
     
     with col1:
@@ -116,9 +120,9 @@ def main():
         
         if st.button("🎯 Confirmar y Firmar Pedido"):
             if nombre_completo and email:
-                # Enviar confirmación por email (NO puede escribir en Sheets)
-                st.success("📧 Confirmación enviada - Nos pondremos en contacto contigo")
+                st.success("🎉 ¡Confirmación recibida!")
                 st.balloons()
+                st.info("📧 Nos pondremos en contacto contigo para proceder con la producción")
             else:
                 st.error("❌ Por favor complete todos los campos")
     
@@ -128,8 +132,6 @@ def main():
         
         if st.button("📤 Enviar Solicitud de Cambios"):
             if cambios and contacto:
-                st.success("📧 Solicitud enviada - Nos pondremos en contacto contigo")
-                st.info("🛠️ Ajustaremos los detalles según sus indicaciones")
-
-if __name__ == "__main__":
-    main()
+                st.success("✅ Solicitud de cambios enviada")
+                st.info("🛠️ Nos pondremos en contacto contigo para ajustar los detalles")
+                
