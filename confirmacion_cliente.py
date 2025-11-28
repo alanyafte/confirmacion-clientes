@@ -168,9 +168,4 @@ try:
 except Exception as e:
     st.error("❌ ERROR CRÍTICO")
     st.code(traceback.format_exc())
-        
-        if st.button("📤 Enviar Solicitud de Cambios"):
-            if cambios and contacto:
-                st.success("✅ Solicitud de cambios enviada")
-                st.info("🛠️ Nos pondremos en contacto contigo para ajustar los detalles")
                 
